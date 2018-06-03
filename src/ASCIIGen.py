@@ -34,6 +34,10 @@ def generate(image):
     """
     Creates an ASCII image using a predefined lookup table
     
+    Uses predefined 'assci' string and 'breakpoints' list to then test
+    the brightness of each pixel in the image and uses the breakpoints 
+    to determine which value to choose form the ascii string.
+    
     Parameters:
     image (image):    Image to be processed and generated
     
