@@ -1,9 +1,9 @@
 """
-Version 0.1.1
+Version 0.1.2
 Author: Ronald Lencevicius
 """
 
-from PIL     import Image, ImageEnhance
+from PIL     import Image, ImageEnhance, ImageFont, ImageDraw
 from bisect  import bisect
 import time
 
@@ -26,8 +26,8 @@ def preprocess(address, scale):
     img = Image.open(address)
     img = img.convert('L')
     enh = ImageEnhance.Contrast(img)
-    img = enh.enhance(1.5)
-    img = img.resize((int(160/scale),int(75/scale)), Image.HAMMING)
+    img = enh.enhance(1)
+    img = img.resize((int(120/scale),int(70/scale)), Image.HAMMING)
     return img
     
 def generate(image):
@@ -44,7 +44,7 @@ def generate(image):
     image (image):    Image to be processed and generated
     
     Returns:
-    string (str):     String containing the ASCII image
+    image (image):    Image representing the original input as ascii
     """
     
     ascii            = " .:-=+*#%@"
@@ -53,21 +53,29 @@ def generate(image):
     string = ""
     for y in range(0, image.size[1]):
         for x in range(0, image.size[0]):
-            brightness     = image.getpixel((x,y))
+            brightness     = 255 - image.getpixel((x,y))
             char           = ascii[bisect(breakpoints, brightness)]
             string         = string + char
         string = string + "\n"
     
-    return string
+    im = Image.new("RGB", (10000,10000))
+    img = ImageDraw.Draw(im)
+    font = ImageFont.truetype("system8x12.ttf", 32)
+    img.text((0,0), string, font = font)
+    
+    im=im.crop(im.getbbox())
+    im = im.convert('1')
+    im.show()
+    return im
 
 #~~~~~~~~~~~~RUNNER~~~~~~~~~~~~~#
 address = "Python-Logo.png"
 
-image     = preprocess(address, 1.5)
+image     = preprocess(address, 1)
 ASCII     = generate(image)
-file      = open("ASCII.txt", "w")
+#file      = open("ASCII.txt", "w")
 
-file.write(ASCII)
-file.close()
+#file.write(ASCII)
+#file.close()
 
-print(ASCII)
+#print(ASCII)

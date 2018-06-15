@@ -1,3 +1,4 @@
-ASCIIGenExample.py
-CourierNew.ttf
-system8x12.ttf
+*.ttf
+*.jpg
+*.jpeg
+*.png
