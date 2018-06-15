@@ -1,21 +1,29 @@
 from PIL import Image, ImageFont, ImageDraw
-
-im = Image.new("RGB", (2000, 2000))
-
-draw = ImageDraw.Draw(im)
+from collections import defaultdict
 
 # use a truetype font
 font = ImageFont.truetype("system8x12.ttf", 32)
+          
+table = defaultdict(list)
+table[0].append(chr(32))
 
-draw.text((0, 0), "@ABCDEFGHIJKLMNOPQRSTUVWXYZ", font=font)
+for i in range(33,127):
+    h,w = font.getsize(chr(i))
+    im = Image.new("RGB", (h,w))
+    draw = ImageDraw.Draw(im)
+    draw.text((0,0), chr(i), font=font)
+    im = im.convert('L')
+    
+    sum = 0
+    for x in range(h - 1):
+        for y in range(w - 1):
+            mu = im.getpixel((x,y))
+            sum += mu
+            
+    val = sum/(h*w)
+    
 
-# remove unneccessory whitespaces if needed
-im=im.crop(im.getbbox())
-im = im.convert('1')
-im.show()
-
-# write into file
-im = im.tobitmap()
-file = open("bitmap.xbm", "wb")
-file.write(im)
-file.close()
+    table[int(val)].append(chr(i))
+print(len(table))
+print(sorted(table))
+print(table)
