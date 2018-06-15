@@ -69,7 +69,7 @@ def generate(image):
     return im
 
 #~~~~~~~~~~~~RUNNER~~~~~~~~~~~~~#
-address = "Python-Logo.png"
+address = "allmight.jpg"
 
 image     = preprocess(address, 1)
 ASCII     = generate(image)
