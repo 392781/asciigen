@@ -7,6 +7,8 @@ font = ImageFont.truetype("system8x12.ttf", 32)
 # creates map with a list of values
 table = defaultdict(list)
 table[0].append(chr(32))
+min = 0
+max = 0
 
 for i in range(33,127):
     # finds the characters height and width and creates an 
@@ -25,10 +27,24 @@ for i in range(33,127):
             mu = im.getpixel((x,y))
             sum += mu
             
-    val = sum/(h*w)
+    val = int(sum/(h*w))
     
-    table[int(val)].append(chr(i))
+    table[val].append(chr(i))
 
+    if (val > max):
+        max = val
+        
+charTable = defaultdict(list)
+for key in table:
+    tmp = int((255 * (key - min)) / (max - min))
+    charTable[tmp] = table[key]
+    
 print(len(table))
 print(sorted(table))
 print(table)
+
+print()
+
+print(len(charTable))
+print(sorted(charTable))
+print(charTable)
