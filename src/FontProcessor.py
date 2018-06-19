@@ -40,11 +40,12 @@ for key in table:
     charTable[tmp] = table[key]
     
 print(len(table))
-print(sorted(table))
-print(table)
+
+for key in sorted(table.keys()):
+    print("%s: %s" % (key, table[key]))
 
 print()
 
 print(len(charTable))
-print(sorted(charTable))
-print(charTable)
+for key in sorted(charTable.keys()):
+    print("%s: %s" % (key, charTable[key]))
