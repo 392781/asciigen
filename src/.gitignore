@@ -2,3 +2,6 @@
 *.jpg
 *.jpeg
 *.png
+!mona1.png
+!ASCIImona1.jpg
+__pycache__/

@@ -1,19 +1,18 @@
 from PIL import Image, ImageFont, ImageDraw
 from collections import defaultdict
-
+from bisect import bisect
+import random as r
 
 def process(font, size):
 
     # use a truetype font
     font = ImageFont.truetype(font, size)
 
-    # creates map with a list of values
-    #table = defaultdict(list)
-    #table[0].append(chr(32))
-    #min = 0
-    #max = 0
-
-    table = []
+    #creates map with a list of values
+    table = defaultdict(list)
+    table[0].append(chr(32))
+    min = 0
+    max = 0
     
     for i in range(33,127):
         # finds the characters height and width and creates an 
@@ -39,11 +38,13 @@ def process(font, size):
         if (val > max):
             max = val
             
-    charTable = defaultdict(list)
+    charDict = defaultdict(list)
     for key in table:
         tmp = int((255 * (key - min)) / (max - min))
-        charTable[tmp] = table[key]
+        charDict[tmp] = table[key]
         
+    return charDict
+'''
     print(len(table))
 
     for key in sorted(table.keys()):
@@ -51,6 +52,23 @@ def process(font, size):
 
     print()
 
-    print(len(charTable))
-    for key in sorted(charTable.keys()):
-        print("%s: %s" % (key, charTable[key]))
+    print(len(charDict))
+    for key in sorted(charDict.keys()):
+        print("%s: %s" % (key, charDict[key]))
+'''
+    
+def get_h_w(font, size):
+    font = ImageFont.truetype(font, size)
+    h,w = font.getsize(chr(120))
+    
+    return h,w
+
+def select_symbol(val, charTable):
+    lookup = sorted(charTable.keys())
+    pos = bisect(lookup, val) - 1
+    key = lookup[pos]
+    vals = charTable[key]
+    
+    return vals[0]
+    
+
