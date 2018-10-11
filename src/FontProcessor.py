@@ -42,7 +42,9 @@ def process(font, size):
     for key in table:
         tmp = int((255 * (key - min)) / (max - min))
         charDict[tmp] = table[key]
-        
+       
+    for key in charDict:
+        print(charDict[key])
     return charDict
 '''
     print(len(table))
@@ -68,7 +70,8 @@ def select_symbol(val, charTable):
     pos = bisect(lookup, val) - 1
     key = lookup[pos]
     vals = charTable[key]
+    choose = r.randint(0, len(vals) - 1)
     
-    return vals[0]
+    return vals[choose]
     
 

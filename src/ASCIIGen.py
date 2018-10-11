@@ -1,5 +1,5 @@
 """
-Version 0.1.4
+Version 0.1.5
 Author: Ronald Lencevicius
 """
 
@@ -69,19 +69,6 @@ def generate(image):
         yp += h
         string = string + "\n"
                 
-    '''
-    
-   
-    ascii            = " .:-=+*#%@"
-    breakpoints      = [25, 51, 76, 102, 127, 153, 178, 204, 229]
-    
-    for y in range(0, image.size[1]):
-        for x in range(0, image.size[0]):
-            brightness     = image.getpixel((x,y))
-            char           = fp.select_symbol(brightness, ascii_table)
-            string         = string + char
-        string = string + "\n"
-    '''
     
     im = Image.new("RGB", (10000,10000))
     img = ImageDraw.Draw(im)
@@ -98,9 +85,3 @@ address = "mona1.png"
 
 image     = preprocess(address, 1)
 ASCII     = generate(image)
-#file      = open("ASCII.txt", "w")
-
-#file.write(ASCII)
-#file.close()
-
-#print(ASCII)
