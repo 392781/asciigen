@@ -17,4 +17,4 @@ Will generate ASCII art based on an input image.
 <img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/mona1.png" width="400"/> <img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/ASCIImona1.jpg" width="424"/> 
 
 ### Implemented Sources
-* Mikolay, Matthew. “A Basic ASCII Art Algorithm.” Mattmik, Rovi , 24 July 2012, web.archive.org/web/20180331191700/http://mattmik.com/articles/ascii/ascii.html.
+* Mikolay, Matthew. “A Basic ASCII Art Algorithm.” Mattmik, Rovi , 24 July 2012, https://web.archive.org/web/20180331191700/http://mattmik.com/articles/ascii/ascii.html.
