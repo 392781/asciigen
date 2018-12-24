@@ -11,6 +11,7 @@ Will generate ASCII art based on an input image.
 * DPI for image
 * Adjusting analyzer and brightness ranges
 * Color
+* Implementation of SSIM
 
 ## Progress
 <img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/mona1.png" width="400"/> <img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/ASCIImona1.jpg" width="424"/> 
