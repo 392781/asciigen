@@ -2,6 +2,7 @@
 *.jpg
 *.jpeg
 *.png
-!mona1.png
-!ASCIImona1.jpg
+!test_images/mona1.png
+!test_images/ASCIImona1.jpg
 __pycache__/
+test_images/
