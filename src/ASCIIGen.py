@@ -47,7 +47,7 @@ def generate(font, fontsize, image):
     Returns:
         image (image):    Image representing the original input as ascii
     """
-    ascii_table = fp.process(font)
+    ascii_table = fp.dprocess(font)
     w,h = fp.get_h_w(font, fontsize)
     w,h = image.size[0], image.size[1]
     x = gcd(h, w)
