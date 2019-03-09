@@ -1,10 +1,11 @@
 """
-Version 0.1.5
+Version 0.1.7
 Author: Ronald Lencevicius
 """
 
-from PIL     import Image, ImageEnhance, ImageFont, ImageDraw
-from bisect  import bisect
+from PIL    import Image, ImageEnhance, ImageFont, ImageDraw
+from bisect import bisect
+from math   import gcd
 import FontProcessor as fp
 import time
 
@@ -13,8 +14,6 @@ def preprocess(address, scale):
     Processes image by:
     1. Converting to greyscale 
     2. Pumping up the contrast
-    3. Resizing to fit the character size 
-        * Will change this up due to loss of detail
         
     Parameters:
         address (str):     Location of image
@@ -32,7 +31,7 @@ def preprocess(address, scale):
     
     return img
     
-def generate(image):
+def generate(font, fontsize, image):
     """
     Creates an ASCII image using a predefined lookup table
     
@@ -48,9 +47,14 @@ def generate(image):
     Returns:
         image (image):    Image representing the original input as ascii
     """
-    ascii_table = fp.process("system8x12.ttf", 32)
-    w = 7
-    h = 12
+    ascii_table = fp.process(font)
+    w,h = fp.get_h_w(font, fontsize)
+    w,h = image.size[0], image.size[1]
+    x = gcd(h, w)
+    h //= x
+    w //= x
+    h, w = 12, 7
+    print(h,w)
     left_px = 0
     xp = 0
     yp = 0
@@ -69,10 +73,10 @@ def generate(image):
         yp += h
         string = string + "\n"
                 
-    
-    im = Image.new("RGB", (10000,10000))
+    size = 10000
+    im = Image.new("RGB", (size,size))
     img = ImageDraw.Draw(im)
-    font = ImageFont.truetype("system8x12.ttf", 32)
+    font = ImageFont.truetype(font, fontsize)
     img.text((0,0), string, font = font)
     
     im=im.crop(im.getbbox())
@@ -84,4 +88,4 @@ def generate(image):
 address = "mona1.png"
 
 image     = preprocess(address, 1)
-ASCII     = generate(image)
+ASCII     = generate("FSEX300.ttf", 64, image)
