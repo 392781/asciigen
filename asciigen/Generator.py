@@ -85,7 +85,7 @@ def generate(font, fontsize, image):
     return im
 
 #~~~~~~~~~~~~RUNNER~~~~~~~~~~~~~#
-address = "mona1.png"
+address = "clown.png"
 
 image     = preprocess(address, 1)
-ASCII     = generate("FSEX300.ttf", 64, image)
+ASCII     = generate("FSEX300.ttf", 170, image)
