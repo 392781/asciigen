@@ -1,1 +1,1 @@
-from asciigen import *
+from asciigen.FontProcessor import FontProcessor

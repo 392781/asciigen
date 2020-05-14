@@ -16,7 +16,7 @@ import random as r
 '''
 
 class FontProcessor:
-    def __init__(self, font = 'FSEX300.ttf', size=None, optimal = False):
+    def __init__(self, font = 'asciigen/FSEX300.ttf', size=None, optimal = False):
         self.chrdict = defaultdict(list)
         self.font = font
 
