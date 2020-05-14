@@ -1,6 +1,7 @@
 from PIL import Image, ImageFont, ImageDraw
 from collections import defaultdict
 from bisect import bisect
+from tqdm import tqdm
 import random as r
 
 '''
@@ -15,11 +16,27 @@ import random as r
 '''
 
 class FontProcessor:
-    def __init__(self, font, size):
-        self.font = ImageFont.truetype(font, size)
-        self.w, self.h = self.font.getsize(chr(64))
+    def __init__(self, font = 'FSEX300.ttf', size=None, optimal = False):
         self.chrdict = defaultdict(list)
+        self.font = font
 
+        if (size == None and optimal == True):
+            length = 0
+            for i in tqdm(range(8, 131), ascii=True,desc='Finding table'):
+                tmp = self.finddict(i)
+                if (len(tmp) > length):
+                    self.chrdict = tmp
+                    length = len(tmp)
+        elif (size == None and optimal == False):
+            self.chrdict = self.finddict(64)
+        else:
+            self.chrdict = self.finddict(size)
+
+
+
+    def finddict(self, size):
+        font = ImageFont.truetype(self.font, size)
+        chrdict = defaultdict(list)
         #creates map with a list of values
         table = defaultdict(list)
         table[0].append(chr(32))
@@ -29,10 +46,10 @@ class FontProcessor:
         for i in range(33,127):
             # finds the characters height and width and creates an 
             # image where it pastes the character and processes it
-            h, w = self.font.getsize(chr(i))
+            h,w = font.getsize(chr(i))
             image = Image.new("RGB", (h, w))
             draw = ImageDraw.Draw(image)
-            draw.text((0,0), chr(i), font=self.font)
+            draw.text((0,0), chr(i), font=font)
             image = image.convert('L')
             
             # finds the brightness value of the character and adds 
@@ -53,7 +70,10 @@ class FontProcessor:
 
         for key in table:
             tmp = int((255 * (key - min)) / (max - min))
-            self.chrdict[tmp] = table[key]
+            chrdict[tmp] = table[key]
+        
+        return chrdict
+
 
 
     def select_symbol(self, val):
@@ -64,9 +84,14 @@ class FontProcessor:
         choose = r.randint(0, len(vals) - 1)
         
         return vals[choose]
-                
 
-        
+
+
     def printdict(self):
-        for key in self.chrdict:
+        for key in sorted(self.chrdict.keys()):
             print(self.chrdict[key])
+
+
+
+    def length(self):
+        return len(self.chrdict)
