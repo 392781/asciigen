@@ -1,9 +1,0 @@
-*.ttf
-*.jpg
-*.jpeg
-*.png
-!mona1.png
-!ASCIImona1.jpg
-!ASCIImona_FSEX.jpg
-__pycache__/
-test_images/
