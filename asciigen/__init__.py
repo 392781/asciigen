@@ -1,1 +1,1 @@
-from asciigen.FontProcessor import FontProcessor
+from asciigen.gradient import FontProcessor
