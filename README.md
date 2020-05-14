@@ -8,9 +8,12 @@ Will generate ASCII art based on an input image.
 * Improved brightness range of ASCII table (work in progress)
 
 ## Working on
+* Rewriting code to be used as a library instead of as a list of functions (v0.2.0)
 * Implementation of SSIM
-* Adjusting analyzer and brightness ranges
+
+## Backburner
 * Color
+* Adjusting analyzer and brightness ranges
 
 ## Progress
 ### Original vs Fixsys
