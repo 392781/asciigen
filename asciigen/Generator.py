@@ -4,9 +4,10 @@ Author: Ronald Lencevicius
 """
 
 from PIL    import Image, ImageEnhance, ImageFont, ImageDraw
+Image.MAX_IMAGE_PIXELS = 100000000
 from bisect import bisect
 from math   import gcd
-import FontProcessor as fp
+from FontProcessor import FontProcessor as fp
 import time
 
 def preprocess(address, scale):
@@ -47,13 +48,14 @@ def generate(font, fontsize, image):
     Returns:
         image (image):    Image representing the original input as ascii
     """
-    ascii_table = fp.dprocess(font)
-    w,h = fp.get_h_w(font, fontsize)
+    ascii_table = fp()
+    ascii_table.printdict()
+    #w,h = fp.get_h_w(font, fontsize)
     w,h = image.size[0], image.size[1]
     x = gcd(h, w)
     h //= x
     w //= x
-    h, w = 12, 7
+    qh, w = 12, 7
     print(h,w)
     left_px = 0
     xp = 0
@@ -67,7 +69,7 @@ def generate(font, fontsize, image):
                     brightness += image.getpixel((x, y))
             xp += w 
             brightness  = brightness // (h*w)
-            char        = fp.select_symbol(brightness, ascii_table)
+            char        = ascii_table.select_symbol(brightness)
             string      = string + char      
         xp = 0
         yp += h
@@ -81,11 +83,12 @@ def generate(font, fontsize, image):
     
     im=im.crop(im.getbbox())
     im = im.convert('1')
+    im = im.resize((im.size[0]//8, im.size[1]//8))
     im.show()
     return im
 
 #~~~~~~~~~~~~RUNNER~~~~~~~~~~~~~#
-address = "clown.png"
+address = "../imgs/mona1.png"
 
 image     = preprocess(address, 1)
-ASCII     = generate("FSEX300.ttf", 170, image)
+ASCII     = generate("FSEX300.ttf", 128, image)
