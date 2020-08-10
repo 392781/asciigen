@@ -58,4 +58,18 @@ def main():
     # This bit below gives a constant parameter for the font name in our find_dictionary function.
     func_partial = partial(find_dictionary, '../fonts/FSEX300.ttf')
     # With the font parameter set, we just need to give an iterable range of sizes for our function and run it in parallel!
+    # Let's also time it :D
+    print('Let\'s start!')
+    start = timer()
     pool.map(func_partial, iter(range(8,131)))
+    end = timer()
+    print('Using {} core(s): {:>10.5}s'.format(mp.cpu_count(), end-start))
+
+    # Let's time the single core
+    start = timer()
+    singleproc()
+    end = timer()
+    print('Using 1 core: {:>13.5}s'.format(end - start))
+
+if (__name__ == '__main__'):
+    main()
