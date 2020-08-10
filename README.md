@@ -1,4 +1,4 @@
-# ASCIIGen - ASCII Art Generator
+# asciigen - ASCII Art Generator
 Will generate ASCII art based on an input image.
 
 ## Progress
