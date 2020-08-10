@@ -1,4 +1,4 @@
-# ASCIIGen - ASCII Art Generator
+# asciigen - ASCII Art Generator
 Will generate ASCII art based on an input image.
 
 ## Progress
@@ -8,16 +8,19 @@ Will generate ASCII art based on an input image.
 * Improved brightness range of ASCII table (work in progress)
 
 ## Working on
+* Rewriting code to be used as a library instead of as a list of functions (v0.2.0)
 * Implementation of SSIM
-* Adjusting analyzer and brightness ranges
+
+## Backburner
 * Color
+* Adjusting analyzer and brightness ranges
 
 ## Progress
 ### Original vs Fixsys
-<img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/mona1.png" width="417"/> <img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/ASCIImona_FSEX.jpg" width="412"/>
+<img src="https://raw.githubusercontent.com/392781/asciigen/master/imgs/mona1.png" width="417"/> <img src="https://raw.githubusercontent.com/392781/asciigen/master/imgs/ASCIImona_FSEX.jpg" width="412"/>
 
 ### ASCII - System8x12 vs Fixsys
-<img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/ASCIImona1.jpg" width="429"/> <img src="https://raw.githubusercontent.com/392781/ASCIIGen/master/src/ASCIImona_FSEX.jpg" width="400"/>
+<img src="https://raw.githubusercontent.com/392781/asciigen/master/imgs/ASCIImona1.jpg" width="429"/> <img src="https://raw.githubusercontent.com/392781/asciigen/master/imgs/ASCIImona_FSEX.jpg" width="400"/>
 
 ### Implemented Sources
 * Mikolay, Matthew. “A Basic ASCII Art Algorithm.” Mattmik, Rovi , 24 July 2012, https://web.archive.org/web/20180331191700/http://mattmik.com/articles/ascii/ascii.html.
