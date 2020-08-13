@@ -1,4 +1,4 @@
-from PIL import Image, ImageEnhance, ImageFont, ImageDraw
+from PIL import Image, ImageEnhance, ImageFont, ImageDraw, ImageStat
 from collections import defaultdict
 from tqdm import tqdm
 from bisect import bisect
@@ -32,22 +32,19 @@ def _find_dictionary(font, size):
             draw = ImageDraw.Draw(image)
             draw.text((0,0), chr(i), font=font)
             image = image.convert('L')
+            stats = ImageStat.Stat(image)
             
             # finds the brightness value of the character and adds 
             # it to the table
 
-            sum = 0
-            for x in range(h - 1):
-                for y in range(w - 1):
-                    mu = image.getpixel((x,y))
-                    sum += mu
+            sum = stats.sum[0]
                     
-            val = int(sum/(h*w))
+            brightness_value = int(sum/(h*w))
             
-            table[val].append(chr(i))
+            table[brightness_value].append(chr(i))
 
-            if (val > max):
-                max = val
+            if (brightness_value > max):
+                max = brightness_value
 
         for key in table:
             tmp = int((255 * (key - min)) / (max - min))
@@ -74,6 +71,10 @@ def print_dict(dictionary):
 
 def length(dictionary):
     return len(dictionary)
+
+def _block_brightness():
+    
+    return 0
 
 
 def generate(font, fontsize, image, gradient = ' .:+/$@'):
