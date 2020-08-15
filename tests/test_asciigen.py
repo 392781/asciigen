@@ -5,7 +5,9 @@ sys.path.append(os.getcwd())
 from asciigen import api
 sys.path.pop()
 
-dictionary, size = api.select_dictionary()
+font = 'UbuntuMono-R.ttf'
+
+dictionary, size = api.select_dictionary(font=font)
 print('Font Size: ', size)
-api.generate(font='fonts/FSEX300.ttf', fontsize=22, 
-            image='imgs/clown.png', gradient=dictionary)
+api.generate(font=font, fontsize=size, 
+            image='imgs/mona1.png', gradient=dictionary)
