@@ -2,20 +2,9 @@ from PIL import Image, ImageEnhance, ImageFont, ImageDraw, ImageStat
 from collections import defaultdict
 from tqdm import tqdm
 from bisect import bisect
-from math import gcd
 import random as r
 
 Image.MAX_IMAGE_PIXELS = 100000000
-
-'''
-asciigen class tree
-
-asciigen - param : font
-    gradient - param : type, gradient, size
-    generate - param : image, original_size, generate_size, color
-'''
-
-_gradient_dictionary = defaultdict(list)
 
 def _find_dictionary(font, size):
     font = ImageFont.truetype(font, size)
@@ -77,26 +66,34 @@ def length(dictionary):
 
 def _block_brightness(image, box):
     image = image.crop(box)
-    return ImageStat.Stat(image).sum[0]
+    area = (box[2]-box[0])*(box[3]-box[1])
+    return ImageStat.Stat(image).sum[0] // area
 
-def select_dictionary(method = 'naive', size = None):
+def select_dictionary(font, method = 'naive', size = None):
+    try:
+        ImageFont.truetype(font, 12)
+    except OSError:
+        try:
+            ImageFont.load(font)
+        except OSError:
+            print('Cannot open font file')
     dictionary = defaultdict(list)
     if (method == 'naive'):
         length = 0
         for i in range(8, 131):
-            tmp = _find_dictionary('./fonts/FSEX300.ttf', i)
+            tmp = _find_dictionary(font, i)
             tmp_len = len(tmp)
             if (tmp_len > length):
                 dictionary = tmp
                 length = tmp_len
                 size = i
     elif (method == 'custom'):
-        dictionary = _find_dictionary('./fonts/FSEX300.ttf', size)
+        dictionary = _find_dictionary(font, size)
     return dictionary, size
 
 
 
-def generate(font, fontsize, image, gradient = ' .:+/$@'):
+def generate(font, fontsize, image, gradient, save=True):
     """
     Creates an ASCII image using a predefined lookup table
     
@@ -114,133 +111,43 @@ def generate(font, fontsize, image, gradient = ' .:+/$@'):
     """
 
     ascii_table = gradient
-
+    font = ImageFont.truetype(font, fontsize)
     sorted_table_keys = sorted(ascii_table.keys())
 
     image_string = []
     scale_ratio = 0
     with Image.open(image) as image:
-        # w,h = image.size[0], image.size[1]
-        # x = gcd(h, w)
-        # h //= x
-        # w //= x
-        h, w = 12, 7
-        xp = 0
-        yp = 0
+        image_w = image.size[0]
+        image_h = image.size[1]
+        font_w, font_h = font.getsize(_select_symbol(ascii_table, sorted_table_keys, 255))
+        font_aspect_ratio = font_w/font_h
+        font_scaler = image_h/110
+        font_w = int(font_aspect_ratio * font_scaler)
+        font_h = int(font_scaler)
+
         brightness = 0
-        scale_ratio = image.size[0]
+        scale_ratio = image_w
 
-
-        '''
-        notes:
-            img width is 1347 you want to divide it into sections 300 width
-            apart... 
-        '''
-        image_width = image.size[0]
-        image_height = image.size[1]
-        for y in tqdm(range(0, image_height, h)):
-            if (y + h < image_height):
-                for x in range(0, image_width, w):
-                    if (x + w < image_width):
-                        brightness = _block_brightness(image, (x, y, x+h, y+h))
-                        brightness //= h*w
-                        char = _select_symbol(ascii_table, sorted_table_keys, brightness)
-                        image_string.append(char)
+        for y in tqdm(range(0, image_h, font_h)):
+            for x in range(0, image_w, font_w):
+                brightness = _block_brightness(image, (x, y, x+font_h, y+font_h))
+                char = _select_symbol(ascii_table, sorted_table_keys, brightness)
+                image_string.append(char)
             image_string.append('\n')
-        image_string = ''.join(image_string)        
+        image_string = ''.join(image_string) 
 
-
-        # while (h + yp < image.size[1]):
-        #     while (w + xp < image.size[0]):    
-        #         for y in range(yp, h + yp):
-        #             for x in range(xp, w + xp):
-        #                 brightness += image.getpixel((x, y))
-        #         xp += w 
-        #         brightness = brightness // (h*w)
-        #         char = ascii_table.select_symbol(brightness)
-        #         string = string + char      
-        #     xp = 0
-        #     yp += h
-        #     string = string + "\n"
-                
     im = Image.new("RGB", (10000,10000))
     img = ImageDraw.Draw(im)
-    font = ImageFont.truetype(font, fontsize)
-    img.text((0,0), image_string)
+
+    img.text((0,0), image_string, font=font)
     
     im = im.crop(im.getbbox())
-    im = im.convert('1')
-    #scale_ratio /= im.size[0]
-    scale_ratio = 1
+    im = im.convert('L')
+    scale_ratio /= im.size[0]
     im = im.resize((int(im.size[0]*scale_ratio), 
-                    int(im.size[1]*scale_ratio)))
+                    int(im.size[1]*scale_ratio)), 
+                    resample=Image.BICUBIC)
     im.show()
-    im.save('monatest.jpg')
+    if (save==True):
+        im.save('ascii.png')
     return im
-
-
-
-
-
-
-
-# def generate(font, fontsize, image):
-#     """
-#     Creates an ASCII image using a predefined lookup table
-    
-#     Uses predefined 'ascii' string and 'breakpoints' list to then test
-#     the brightness of each pixel in the image and uses the breakpoints 
-#     to determine which value to choose from the ascii string.  The 
-#     chosen character is then appended to the string with linebreaks 
-#     between each subsequent line of pixels
-    
-#     Parameters:
-#         image (image):    Image to be processed and generated
-    
-#     Returns:
-#         image (image):    Image representing the original input as ascii
-#     """
-#     ascii_table = fp()
-#     ascii_table.printdict()
-#     #w,h = fp.get_h_w(font, fontsize)
-#     w,h = image.size[0], image.size[1]
-#     x = gcd(h, w)
-#     h //= x
-#     w //= x
-#     h, w = 12, 7
-#     print(h,w)
-#     left_px = 0
-#     xp = 0
-#     yp = 0
-#     brightness = 0
-#     string = ""
-#     while (h + yp < image.size[1]):
-#         while (w + xp < image.size[0]):    
-#             for y in range(yp, h + yp):
-#                 for x in range(xp, w + xp):
-#                     brightness += image.getpixel((x, y))
-#             xp += w 
-#             brightness  = brightness // (h*w)
-#             char        = ascii_table.select_symbol(brightness)
-#             string      = string + char      
-#         xp = 0
-#         yp += h
-#         string = string + "\n"
-                
-#     size = 10000
-#     im = Image.new("RGB", (size,size))
-#     img = ImageDraw.Draw(im)
-#     font = ImageFont.truetype(font, fontsize)
-#     img.text((0,0), string, font = font)
-    
-#     im=im.crop(im.getbbox())
-#     im = im.convert('1')
-#     im = im.resize((im.size[0]//8, im.size[1]//8))
-#     im.show()
-#     return im
-
-# #~~~~~~~~~~~~RUNNER~~~~~~~~~~~~~#
-# address = "../imgs/mona1.png"
-
-# image     = preprocess(address, 1)
-# ASCII     = generate("FSEX300.ttf", 128, image)
