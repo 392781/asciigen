@@ -9,5 +9,6 @@ font = 'UbuntuMono-R.ttf'
 
 dictionary, size = api.select_dictionary(font=font)
 print('Font Size: ', size)
-api.generate(font=font, fontsize=size, 
-            image='imgs/mona1.png', gradient=dictionary)
+api.generate(image='imgs/mona1.png', 
+            font=font, fontsize=size, 
+            gradient=dictionary)
